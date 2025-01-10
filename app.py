@@ -7,7 +7,7 @@ def load_data():
 
 data = load_data()  
 
-@st.cache_data  # Cache the recommendation logic
+@st.cache_data  
 def recommend_restaurant(location, parameter):
     filtered_data = data[data['Location'] == location]
     top_3_restaurants = filtered_data.nlargest(3, 'Sentiment_Score')['Restaurant Name'].values
@@ -22,8 +22,8 @@ def main_app():
     st.title('Restaurant Recommendation System')
 
     if 'location' not in st.session_state:
-        st.session_state['location'] = 'Banashankari'  # Default location
-        st.session_state['parameter'] = 'Cuisine'  # Default preference
+        st.session_state['location'] = 'Banashankari'  
+        st.session_state['parameter'] = 'Cuisine'  
 
     location = st.selectbox('Choose your location:', 
                             ['Banashankari', 'Basavanagudi', 'Mysore Road', 'Jayanagar', 'Kumaraswamy Layout', 

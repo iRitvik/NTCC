@@ -1,14 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-# Load the data
-@st.cache_data  # Cache the data loading function to avoid reloading every time
+@st.cache_data 
 def load_data():
     return pd.read_excel('final_scores_file_forUse.xlsx')
 
 data = load_data()  
 
-# Define a function for restaurant recommendation
 @st.cache_data  # Cache the recommendation logic
 def recommend_restaurant(location, parameter):
     filtered_data = data[data['Location'] == location]
@@ -20,16 +18,13 @@ def recommend_restaurant(location, parameter):
     elif parameter == 'Rating':
         return top_3_restaurants[2]
 
-# Main application
 def main_app():
     st.title('Restaurant Recommendation System')
 
-    # Initialize session state for location and parameter only if not already initialized
     if 'location' not in st.session_state:
         st.session_state['location'] = 'Banashankari'  # Default location
         st.session_state['parameter'] = 'Cuisine'  # Default preference
 
-    # Select location and preference without triggering recomputation
     location = st.selectbox('Choose your location:', 
                             ['Banashankari', 'Basavanagudi', 'Mysore Road', 'Jayanagar', 'Kumaraswamy Layout', 
                              'Rajarajeshwari Nagar', 'Vijay Nagar', 'Uttarahalli', 'JP Nagar', 'South Bangalore', 
@@ -68,14 +63,11 @@ def main_app():
 
     parameter = st.selectbox('Choose your preference:', ['Cuisine', 'Price Range', 'Rating'])
 
-    # Store the selection in session state only after the button is clicked
     if st.button('Recommend'):
         st.session_state['location'] = location
         st.session_state['parameter'] = parameter
 
-        # Perform recommendation only when the button is clicked
         recommendation = recommend_restaurant(st.session_state['location'], st.session_state['parameter'])
         st.write(f"We recommend you order from {recommendation} for a delicious meal. Considering your preference as {st.session_state['parameter']}.")
 
-# Run the main app directly
 main_app()
